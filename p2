@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Task Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="time"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            text-align: center;
+            color: red;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        #task-list {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Multiple Task Reminder</h1>
+        
+        <!-- Input for task description and time -->
+        <label for="task">Task Description:</label>
+        <input type="text" id="task" placeholder="Enter your task here">
+        
+        <label for="time">Set Reminder Time:</label>
+        <input type="time" id="time">
+        
+        <button onclick="addTask()">Add Task</button>
+
+        <div id="message"></div>
+
+        <!-- List of added tasks -->
+        <div id="task-list"></div>
+    </div>
+
+    <script>
+        const tasks = [];
+
+        function addTask() {
+            const task = document.getElementById('task').value;
+            const time = document.getElementById('time').value;
+
+            if (!task || !time) {
+                alert("Please fill in both fields.");
+                return;
+            }
+
+            // Store task with its time
+            tasks.push({ task, time });
+
+            // Display tasks
+            displayTasks();
+
+            // Set reminder for each task
+            setReminder(task, time);
+        }
+
+        function displayTasks() {
+            const taskListDiv = document.getElementById('task-list');
+            taskListDiv.innerHTML = '<h3>Your Tasks:</h3>';
+
+            tasks.forEach((task, index) => {
+                taskListDiv.innerHTML += <p>Task: ${task.task} at ${task.time}</p>;
+            });
+        }
+
+        function setReminder(task, time) {
+            const currentTime = new Date();
+            const [hours, minutes] = time.split(":").map(num => parseInt(num, 10));
+            const reminderTime = new Date(currentTime);
+            reminderTime.setHours(hours, minutes, 0, 0);
+
+            if (reminderTime <= currentTime) {
+                reminderTime.setDate(reminderTime.getDate() + 1); // If time has passed for today, set for tomorrow.
+            }
+
+            const timeDifference = reminderTime - currentTime;
+
+            setTimeout(() => {
+                alert(Reminder: Time to ${task}!);
+                document.getElementById('message').innerText = Reminder for: ${task} at ${time};
+            }, timeDifference);
+        }
+    </script>
+
+</body>
+</html>
